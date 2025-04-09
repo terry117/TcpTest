@@ -1,0 +1,82 @@
+﻿<Window
+    x:Class="Server.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:Server"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="通信服务端测试"
+    Width="900"
+    Height="400"
+    WindowStartupLocation="CenterScreen"
+    mc:Ignorable="d">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <Button
+            Grid.Row="0"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            Margin="0,5"
+            Padding="10,5"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Center"
+            Click="OpenService_Click"
+            Content="开启服务" />
+        <Label
+            x:Name="ServiceStateLabel"
+            Grid.Row="0"
+            Grid.Column="1"
+            Margin="0,5"
+            VerticalContentAlignment="Center"
+            FontSize="18" />
+        <Label
+            Grid.Row="1"
+            Grid.Column="0"
+            Margin="0,5"
+            VerticalContentAlignment="Center"
+            Content="接收内容："
+            FontSize="18" />
+        <TextBox
+            x:Name="DisplayMessage"
+            Grid.Row="1"
+            Grid.Column="1"
+            MinHeight="36"
+            Margin="0,5"
+            HorizontalAlignment="Stretch"
+            HorizontalContentAlignment="Left"
+            VerticalContentAlignment="Center"
+            FontSize="18"
+            TextWrapping="Wrap" />
+
+        <Label
+            Grid.Row="2"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            Margin="0,10,0,0"
+            VerticalContentAlignment="Center"
+            Content="接收内容："
+            FontSize="16" />
+        <TextBox
+            x:Name="DisplayBytes"
+            Grid.Row="3"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            MinHeight="200"
+            Margin="0,10"
+            HorizontalAlignment="Stretch"
+            HorizontalContentAlignment="Left"
+            VerticalContentAlignment="Top"
+            FontSize="18"
+            TextWrapping="Wrap" />
+    </Grid>
+</Window>
