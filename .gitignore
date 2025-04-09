@@ -1,0 +1,9 @@
+﻿################################################################################
+# 此 .gitignore 文件已由 Microsoft(R) Visual Studio 自动创建。
+################################################################################
+
+/Client/.vs/Client
+/Client/CommunicationCore/bin/Debug
+/Client/CommunicationCore/obj/Debug
+/Client/Server/bin
+/Client/Server/obj/Debug
