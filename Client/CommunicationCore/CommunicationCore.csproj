@@ -56,6 +56,7 @@
   <ItemGroup>
     <Compile Include="AgreementHelp.cs" />
     <Compile Include="CommunityHelper.cs" />
+    <Compile Include="DefineVoteHelp.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

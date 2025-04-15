@@ -1,5 +1,7 @@
 ﻿using CommunicationCore;
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 
 namespace Client
@@ -91,6 +93,33 @@ namespace Client
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
+            }
+
+        }
+
+        private async void SendDefine_Click(object sender, RoutedEventArgs e)
+        {
+            DisplayBytes.Text = "";
+            await Task.Delay(1000);
+
+            DisplayBytes.Text = "三键自定义表决，直接表决 , 最后一次有效";
+            // 自定义3 ; 先签到后表决  第一次有效
+            var VoteContent =  DefineVoteHelp.GetDefineVoteContent(3, 0, 0);
+            var data = tcpClientHelp.Send(VoteContent);
+            DisplayBytes.Text += $"{System.Environment.NewLine} {data}";
+
+            DisplayBytes.Text += $"{System.Environment.NewLine}";
+            DisplayBytes.Text += $"自定义表决内容,遍历发送";
+            //自定义选项内容
+            var opText = "反对,赞同,中立";
+            var opTextArray = opText.Split(',');
+            for (int i = 0; i < opTextArray.Length; i++)
+            {
+                DisplayBytes.Text += $"{System.Environment.NewLine} {opTextArray[i]}";
+                Thread.Sleep(150);
+                var opTextBytes = DefineVoteHelp.GetDefineVoteOpText(i+1, opTextArray[i]);
+                var d = tcpClientHelp.Send(opTextBytes);
+                DisplayBytes.Text += $"{System.Environment.NewLine} {d}";
             }
 
         }

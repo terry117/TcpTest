@@ -19,11 +19,18 @@ namespace Client
         private BinaryWriter _binaryWrite;
         public bool IsConnected()
         {
-            if (_tcpClient == null)
+            try
+            {
+                if (_tcpClient == null)
+                {
+                    return false;
+                }
+                return _tcpClient != null && _tcpClient.Connected;
+            }
+            catch (Exception)
             {
                 return false;
             }
-            return _tcpClient != null && _tcpClient.Connected;
         }
         public event Action<string> BytesSend;
 
@@ -73,11 +80,9 @@ namespace Client
             if (!IsConnected())
                 throw new Exception($"{AgreementHelp.Ip} {AgreementHelp.Port} 无法连接");
 
-
             var idBytes =   CommunityHelper.CalculteIntToHex(id, 2).ToArray();
             //协议内容
             //var idBytes = CommunityHelper.CalculteIntToHexArray(id, 2);
-
             byte[] messageByte = null;
             if (AgreementHelp.IsGBK)
             {
@@ -88,7 +93,7 @@ namespace Client
                 messageByte = Encoding.UTF8.GetBytes(message);
             }
 
-            // 广播id   （2字节） + 广播人名类型 （1字节）  +  内容数据的长度  （1字节） +  内容数据的长度字节
+            // 广播id   （2字节） + 广播人名类型 （1字节）  +  内容数据的长度N  （1字节） +  内容数据的长度N字节
             byte[] contentBytes = new byte[2 + 1 + 1+ messageByte.Length];
             Array.Copy(idBytes, 0, contentBytes, 0, 2);
             contentBytes[2] = msgType;
@@ -97,11 +102,13 @@ namespace Client
             Send(contentBytes);
         }
 
+
+
         /// <summary>
         /// 发送
         /// </summary>
         /// <param name="buffer">音频数据</param>
-        private void Send(byte[] buffer)
+        public string Send(byte[] buffer)
         {
             var data = new byte[2 + AgreementHelp.MsgLength + buffer.Length + 2];
 
@@ -115,13 +122,18 @@ namespace Client
                 bufferLengthBytes = CommunityHelper.CalculteIntToHexArray(buffer.Length, AgreementHelp.MsgLength);
             }
              
+        
             Array.Copy(frameHeader, 0, data, 0, 2);
             Array.Copy(bufferLengthBytes, 0, data, 2, bufferLengthBytes.Length);
             Array.Copy(buffer, 0, data, 2+ bufferLengthBytes.Length, buffer.Length);
             Array.Copy(frameEnd, 0, data, 2 + bufferLengthBytes.Length + buffer.Length, 2);
-            _binaryWrite?.Write(data);
 
+            //数据内容： 广播id   （2字节） + 广播人名类型 （1字节）  +  内容数据的长度N  （1字节） +  内容数据的长度N字节
+            // 帧头(2) + 数据内容长度(1) + 数据内容（N）+ 帧尾
+            _binaryWrite?.Write(data);
             string str = BitConverter.ToString(data);
+
+            return str;
             BytesSend?.Invoke($"{DateTime.Now:yyyy MM dd HH:mm:ss fff}: {System.Environment.NewLine}{str}{System.Environment.NewLine}总长度 {data.Length}");
         }
 
